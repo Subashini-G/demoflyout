@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:loc="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             loc:Page.UseSafeArea="True"
+             x:Class="demoflyout.Views.LoginPage"
+             Shell.NavBarIsVisible="False">
+   <ContentPage.Resources>
+        <Style x:Key="invalidstyle" TargetType="Entry">
+                <Setter Property="TextColor" Value="Red"/>
+        </Style>
+    </ContentPage.Resources>
+    <ScrollView HeightRequest="3000">
+        <StackLayout Padding="25,60,25,20">
+        <Label Text="Login" FontAttributes="Bold" FontSize="30" HorizontalOptions="Center"/>
+        <StackLayout Padding="0,35,0,35" Spacing="15">
+        <Label Text="Username"/>
+        <StackLayout Orientation="Horizontal" TabIndex="0">
+        <Image Source="/Users/SU20380276/Downloads/user.png"
+               Aspect="AspectFill"/>
+        <Entry x:Name="emailEntry" Placeholder="Type your username"
+               HorizontalOptions="FillAndExpand" Text="{Binding UserName}">
+        <Entry.Behaviors>
+                <xct:MultiValidationBehavior x:Name="emailvalidation"
+                    InvalidStyle="{StaticResource invalidstyle}"
+                    Flags="ValidateOnValueChanging">
+                  
+                    <xct:EmailValidationBehavior xct:MultiValidationBehavior.Error="Invalid email"/>
+                    </xct:MultiValidationBehavior>
+            </Entry.Behaviors>
+        </Entry>
+        </StackLayout>
+        <Label Text="{Binding Errors[0], Source={x:Reference emailvalidation}}" Style="{StaticResource invalidstyle}" x:Name="emailerror"/>
+                    
+              
+        <Label Text="Password"/>
+        <StackLayout Orientation="Horizontal">
+        <Image Source="/Users/SU20380276/Downloads/passwordicon.png"/>
+        <Entry x:Name="passworEntry"
+               Placeholder="Type your password"
+               IsPassword="True"
+               HorizontalOptions="FillAndExpand">
+        <Entry.Behaviors>
+                <xct:MultiValidationBehavior x:Name="multivalidation" IsValid="{Binding isvalid,Mode=OneWay}"
+                    InvalidStyle="{StaticResource invalidstyle}"
+                    Flags="ValidateOnValueChanging">
+                    <xct:TextValidationBehavior MinimumLength="8"
+                                                xct:MultiValidationBehavior.Error="password length should be 8"/>
+                    <xct:CharactersValidationBehavior CharacterType="Digit"
+                        MinimumCharacterCount="1" xct:MultiValidationBehavior.Error="should have atleast 1 numeric value"/>
+                    <xct:CharactersValidationBehavior CharacterType="LowercaseLetter"
+                                                      MinimumCharacterCount="1"
+                                                      xct:MultiValidationBehavior.Error="should have lowercase letter"/>
+                    <xct:CharactersValidationBehavior CharacterType="UppercaseLetter"
+                                                      MinimumCharacterCount="1"
+                                                      xct:MultiValidationBehavior.Error="should have uppercase letters"/>
+                    <xct:CharactersValidationBehavior CharacterType="NonAlphanumericSymbol"
+                                                      xct:MultiValidationBehavior.Error="should have special characters"
+                                                      MinimumCharacterCount="1" />
+                    <xct:CharactersValidationBehavior CharacterType="Whitespace"
+                                                      MaximumCharacterCount="0"
+                                                      xct:MultiValidationBehavior.Error="should not have white space"/>
+                    </xct:MultiValidationBehavior>
+            </Entry.Behaviors>
+        </Entry>
+        </StackLayout>
+        <Label Text="{Binding Errors[0], Source={x:Reference multivalidation}}"
+               Style="{StaticResource invalidstyle}"
+               x:Name="passworderror"/>
+
+        <Label Text="Forgot password?"
+               HorizontalOptions="End"/>
+        </StackLayout>
+        <Button x:Name="loginbutton"
+                Text="LOGIN"
+                Command="{Binding LoginCommand}"
+                Opacity="0.5"
+                BackgroundColor="Tomato"
+                TextColor="White"
+                CornerRadius="25"
+                IsEnabled="{Binding btnenabled,Mode=TwoWay}">
+                <Button.Triggers>
+                    <MultiTrigger TargetType="Button">
+                        <MultiTrigger.Conditions>
+                           <BindingCondition Binding="{Binding Source={x:Reference emailvalidation},
+                                   Path=IsValid}"
+                               Value="true" />
+                             <BindingCondition Binding="{Binding Source={x:Reference multivalidation},
+                                   Path=IsValid}"
+                               Value="true" />
+                        </MultiTrigger.Conditions>
+                        <MultiTrigger.Setters>
+                    <Setter Property="IsEnabled" Value="True"/>
+                        <Setter Property="Opacity" Value="1"/>
+                            </MultiTrigger.Setters>
+                </MultiTrigger>
+            </Button.Triggers>
+                </Button>
+        <StackLayout Padding="25,60" Spacing="15">
+        <Label Text="Or Sign Up Using"
+               HorizontalOptions="Center"/>
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="CenterAndExpand">
+        <Image Source="/Users/SU20380276/Downloads/facebook.png"/>
+            <Image Source="/Users/SU20380276/Downloads/twitter.png"/>
+            <Image Source="/Users/SU20380276/Downloads/google.png"/>
+        </StackLayout>
+        </StackLayout>
+        <Label Text="Or Sign Up Using"
+               HorizontalOptions="Center"
+               VerticalOptions="EndAndExpand"/>
+        <Button Text="SIGN UP"
+                VerticalOptions="End"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="White"
+                TextColor="Black"
+                FontAttributes="Bold"
+                />
+    </StackLayout>
+        </ScrollView>
+    
+</ContentPage>
